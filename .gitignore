@@ -1,0 +1,4 @@
+#Environment var
+.env
+main_backup.go
+pkg/
