@@ -34,7 +34,13 @@ func main() {
 	// defer batch.Close()
 
 	// //Insert any data
-	// if err := batch.Append(105, "Hello, from Go", time.Now(), 555); err != nil {
+	// if err := batch.Append(150, "Change metric", time.Now(), 730); err != nil {
+	// 	log.Fatal("Append failed:", err)
+	// }
+	// if err := batch.Append(109, "Change metric", time.Now(), 200); err != nil {
+	// 	log.Fatal("Append failed:", err)
+	// }
+	// if err := batch.Append(115, "Change metric", time.Now(), 350); err != nil {
 	// 	log.Fatal("Append failed:", err)
 	// }
 	// if err := batch.Send(); err != nil {
@@ -66,6 +72,7 @@ func main() {
 func connect() (driver.Conn, error) {
 	userPass := os.Getenv("USER_PASSWORD")
 	clickhouseHost := os.Getenv("CLICKHOUSE_HOSTNAME")
+
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
