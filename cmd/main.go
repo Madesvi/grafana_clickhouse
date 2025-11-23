@@ -26,6 +26,7 @@ func main() {
 
 	ctx := context.Background()
 
+	// ===== Добавление данных в таблицу =====
 	// batch, err := conn.PrepareBatch(ctx, "INSERT INTO helloworld.my_first_table VALUES (user_id, message, timestamp, metric)")
 	// if err != nil {
 	// 	log.Fatal("Prepare batch failed:", err)
@@ -39,6 +40,7 @@ func main() {
 	// if err := batch.Send(); err != nil {
 	// 	log.Fatal("Send batch failed:", err)
 	// }
+	//========================================
 
 	rows, err := conn.Query(ctx, "SELECT user_id, message, timestamp, metric FROM helloworld.my_first_table")
 
@@ -63,10 +65,11 @@ func main() {
 
 func connect() (driver.Conn, error) {
 	userPass := os.Getenv("USER_PASSWORD")
+	clickhouseHost := os.Getenv("CLICKHOUSE_HOSTNAME")
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
-			Addr: []string{"127.0.0.1:9000"},
+			Addr: []string{clickhouseHost},
 			Auth: clickhouse.Auth{
 				Database: "default",
 				Username: "default",
