@@ -4,13 +4,20 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/ClickHouse/clickhouse-go/v2/lib/driver"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Ошибка загрузки .env")
+	}
+
 	conn, err := connect()
 	if err != nil {
 		fmt.Println(err)
@@ -55,6 +62,7 @@ func main() {
 }
 
 func connect() (driver.Conn, error) {
+	userPass := os.Getenv("USER_PASSWORD")
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
@@ -62,7 +70,7 @@ func connect() (driver.Conn, error) {
 			Auth: clickhouse.Auth{
 				Database: "default",
 				Username: "default",
-				Password: "home",
+				Password: userPass,
 			},
 		})
 	)
@@ -71,7 +79,7 @@ func connect() (driver.Conn, error) {
 	}
 	if err := conn.Ping(ctx); err != nil {
 		if exeption, ok := err.(*clickhouse.Exception); ok {
-			fmt.Println("Expection [%d] %s \n%s\n", exeption.Code, exeption.Message, exeption.StackTrace)
+			fmt.Printf("Expection [%d] %s \n%s\n", exeption.Code, exeption.Message, exeption.StackTrace)
 		}
 		return nil, err
 	}
