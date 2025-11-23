@@ -71,12 +71,13 @@ func main() {
 
 func connect() (driver.Conn, error) {
 	userPass := os.Getenv("USER_PASSWORD")
-	clickhouseHost := os.Getenv("CLICKHOUSE_HOSTNAME")
+	clickhouseHost := os.Getenv("CLICKHOUSE_HOST")
+	clickhousePort := os.Getenv("CLICKHOUSE_PORT")
 
 	var (
 		ctx       = context.Background()
 		conn, err = clickhouse.Open(&clickhouse.Options{
-			Addr: []string{clickhouseHost},
+			Addr: []string{fmt.Sprintf("%s:%s", clickhouseHost, clickhousePort)},
 			Auth: clickhouse.Auth{
 				Database: "default",
 				Username: "default",
